@@ -1,1 +1,103 @@
-<p>machine-form works!</p>
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2>
+        @if (isEditMode) {
+          Editar máquina
+        } @else {
+          Nova máquina
+        }
+      </h2>
+
+      <p>
+        @if (isEditMode) {
+          Atualize os dados da máquina selecionada.
+        } @else {
+          Cadastre uma nova máquina e vincule-a a uma empresa.
+        }
+      </p>
+    </div>
+
+    <a routerLink="/machines" class="secondary-link">
+      Voltar
+    </a>
+  </div>
+
+  @if (errorMessage) {
+    <div class="alert error">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <div class="card">
+    @if (isLoading) {
+      <div class="loading">
+        Carregando máquina...
+      </div>
+    } @else {
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="name">Nome da máquina</label>
+            <input
+              id="name"
+              type="text"
+              name="name"
+              [(ngModel)]="formData.name"
+              placeholder="Ex: Máquina de Corte 01"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="serialNumber">Número de série</label>
+            <input
+              id="serialNumber"
+              type="text"
+              name="serialNumber"
+              [(ngModel)]="formData.serialNumber"
+              placeholder="Ex: SN-001"
+              required
+            />
+          </div>
+
+          <div class="form-group full">
+            <label for="companyId">Empresa</label>
+            <select
+              id="companyId"
+              name="companyId"
+              [(ngModel)]="formData.companyId"
+              required
+            >
+              @for (company of companies; track company.id) {
+                <option [value]="company.id">
+                  {{ company.name }}
+                </option>
+              }
+            </select>
+
+            @if (companies.length === 0) {
+              <small>Nenhuma empresa disponível para vincular.</small>
+            }
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <a routerLink="/machines" class="secondary-button">
+            Cancelar
+          </a>
+
+          <button type="submit" class="primary-button" [disabled]="isSaving">
+            @if (isSaving) {
+              Salvando...
+            } @else if (isEditMode) {
+              Salvar alterações
+            } @else {
+              Criar máquina
+            }
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

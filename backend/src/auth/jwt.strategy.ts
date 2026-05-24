@@ -22,12 +22,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         email: string;
         role: Role;
         companyId: string;
+        comapanyId?: string;
     }): Promise<AuthenticatedUser> {
         return {
             id: payload.sub,
             email: payload.email,
             role: payload.role,
-            companyId: payload.companyId,
+            companyId: payload.companyId ?? payload.comapanyId,
         }
     }
 }

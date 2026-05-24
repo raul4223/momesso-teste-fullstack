@@ -1,1 +1,83 @@
-<p>machine-list works!</p>
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2>Máquinas</h2>
+      <p>Gerencie as máquinas cadastradas e vinculadas às empresas.</p>
+    </div>
+
+    @if (isAdmin) {
+      <button
+        type="button"
+        class="primary-button"
+        routerLink="/machines/new"
+      >
+        Nova máquina
+      </button>
+    }
+  </div>
+
+  @if (errorMessage) {
+    <div class="alert error">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <div class="card">
+    @if (isLoading) {
+      <div class="loading">
+        Carregando máquinas...
+      </div>
+    } @else if (machines.length > 0) {
+      <div class="table-wrapper">
+        <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Número de série</th>
+            <th>Empresa</th>
+            <th>Criado em</th>
+            @if (isAdmin) {
+              <th class="actions-column">Ações</th>
+            }
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (machine of machines; track machine.id) {
+            <tr>
+              <td>{{ machine.name }}</td>
+              <td>{{ machine.serialNumber }}</td>
+              <td>{{ machine.company?.name || '-' }}</td>
+              <td>{{ machine.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+
+              @if (isAdmin) {
+                <td class="actions">
+                  <button
+                    type="button"
+                    class="secondary-button"
+                    [routerLink]="['/machines', machine.id, 'edit']"
+                  >
+                    Editar
+                  </button>
+
+                  <button
+                    type="button"
+                    class="danger-button"
+                    (click)="deleteMachine(machine.id)"
+                  >
+                    Excluir
+                  </button>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="empty">
+        Nenhuma máquina cadastrada.
+      </div>
+    }
+  </div>
+</div>

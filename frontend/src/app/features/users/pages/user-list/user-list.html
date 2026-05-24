@@ -1,1 +1,96 @@
-<p>user-list works!</p>
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2>Usuários</h2>
+      <p>Gerencie os usuários cadastrados e seus perfis de acesso.</p>
+    </div>
+
+    @if (isAdmin) {
+      <button type="button" class="primary-button" routerLink="/users/new">
+        Novo usuário
+      </button>
+    }
+  </div>
+
+  @if (errorMessage) {
+    <div class="alert error">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <div class="card">
+    @if (isLoading) {
+      <div class="loading">
+        Carregando usuários...
+      </div>
+    } @else if (users.length > 0) {
+      <div class="table-wrapper">
+        <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Perfil</th>
+            <th>Empresa</th>
+            <th>Criado em</th>
+            @if (isAdmin) {
+              <th class="actions-column">Ações</th>
+            }
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (user of users; track user.id) {
+            <tr>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+
+              <td>
+                <span
+                  class="role-badge"
+                  [class.current-user]="isCurrentUser(user)"
+                  [class.admin]="!isCurrentUser(user) && user.role === 'ADMIN'"
+                  [class.user]="!isCurrentUser(user) && user.role === 'USER'"
+                >
+                  @if (isCurrentUser(user)) {
+                    Você / {{ user.role }}
+                  } @else {
+                    {{ user.role }}
+                  }
+                </span>
+              </td>
+
+              <td>{{ user.company?.name || '-' }}</td>
+              <td>{{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+
+              @if (isAdmin) {
+                <td class="actions">
+                  <button
+                    type="button"
+                    class="secondary-button"
+                    [routerLink]="['/users', user.id, 'edit']"
+                  >
+                    Editar
+                  </button>
+
+                  <button
+                    type="button"
+                    class="danger-button"
+                    (click)="deleteUser(user.id)"
+                  >
+                    Excluir
+                  </button>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+        </table>
+      </div>
+    } @else {
+      <div class="empty">
+        Nenhum usuário cadastrado.
+      </div>
+    }
+  </div>
+</div>

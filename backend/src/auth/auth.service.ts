@@ -33,7 +33,7 @@ export class AuthService {
             sub: user.id,
             email: user.email,
             role: user.role,
-            comapanyId: user.companyId
+            companyId: user.companyId
         };
 
         return {

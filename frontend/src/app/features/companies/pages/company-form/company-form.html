@@ -1,1 +1,83 @@
-<p>company-form works!</p>
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2>
+        @if (isEditMode) {
+          Editar empresa
+        } @else {
+          Nova empresa
+        }
+      </h2>
+
+      <p>
+        @if (isEditMode) {
+          Atualize os dados da empresa selecionada.
+        } @else {
+          Cadastre uma nova empresa no sistema.
+        }
+      </p>
+    </div>
+
+    <a routerLink="/companies" class="secondary-link">
+      Voltar
+    </a>
+  </div>
+
+  @if (errorMessage) {
+    <div class="alert error">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <div class="card">
+    @if (isLoading) {
+      <div class="loading">
+        Carregando empresa...
+      </div>
+    } @else {
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name">Nome da empresa</label>
+          <input
+            id="name"
+            type="text"
+            name="name"
+            [(ngModel)]="formData.name"
+            placeholder="Ex: Empresa Teste LTDA"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="cnpj">CNPJ</label>
+          <input
+            id="cnpj"
+            type="text"
+            name="cnpj"
+            [(ngModel)]="formData.cnpj"
+            placeholder="Somente números"
+            maxlength="14"
+            required
+          />
+          <small>Informe o CNPJ com 14 dígitos, sem pontos ou barras.</small>
+        </div>
+
+        <div class="form-actions">
+          <a routerLink="/companies" class="secondary-button">
+            Cancelar
+          </a>
+
+          <button type="submit" class="primary-button" [disabled]="isSaving">
+            @if (isSaving) {
+              Salvando...
+            } @else if (isEditMode) {
+              Salvar alterações
+            } @else {
+              Criar empresa
+            }
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

@@ -1,1 +1,139 @@
-<p>user-form works!</p>
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h2>
+        @if (isEditMode) {
+          Editar usuário
+        } @else {
+          Novo usuário
+        }
+      </h2>
+
+      <p>
+        @if (isEditMode) {
+          Atualize os dados do usuário selecionado.
+        } @else {
+          Cadastre um novo usuário no sistema.
+        }
+      </p>
+    </div>
+
+    <a routerLink="/users" class="secondary-link">
+      Voltar
+    </a>
+  </div>
+
+  @if (errorMessage) {
+    <div class="alert error">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <div class="card">
+    @if (isLoading) {
+      <div class="loading">
+        Carregando usuário...
+      </div>
+    } @else {
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="name">Nome</label>
+            <input
+              id="name"
+              type="text"
+              name="name"
+              [(ngModel)]="formData.name"
+              placeholder="Ex: Raul Admin"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">E-mail</label>
+            <input
+              id="email"
+              type="email"
+              name="email"
+              [(ngModel)]="formData.email"
+              placeholder="usuario@teste.com"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">
+              @if (isEditMode) {
+                Nova senha
+              } @else {
+                Senha
+              }
+            </label>
+
+            <input
+              id="password"
+              type="password"
+              name="password"
+              [(ngModel)]="formData.password"
+              [required]="!isEditMode"
+              placeholder="Mínimo 6 caracteres"
+            />
+
+            @if (isEditMode) {
+              <small>Deixe em branco para manter a senha atual.</small>
+            }
+          </div>
+
+          <div class="form-group">
+            <label for="role">Perfil</label>
+            <select
+              id="role"
+              name="role"
+              [(ngModel)]="formData.role"
+              required
+            >
+              <option value="ADMIN">ADMIN</option>
+              <option value="USER">USER</option>
+            </select>
+          </div>
+
+          <div class="form-group full">
+            <label for="companyId">Empresa</label>
+            <select
+              id="companyId"
+              name="companyId"
+              [(ngModel)]="formData.companyId"
+              required
+            >
+              @for (company of companies; track company.id) {
+                <option [value]="company.id">
+                  {{ company.name }}
+                </option>
+              }
+            </select>
+
+            @if (companies.length === 0) {
+              <small>Nenhuma empresa disponível para vincular.</small>
+            }
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <a routerLink="/users" class="secondary-button">
+            Cancelar
+          </a>
+
+          <button type="submit" class="primary-button" [disabled]="isSaving">
+            @if (isSaving) {
+              Salvando...
+            } @else if (isEditMode) {
+              Salvar alterações
+            } @else {
+              Criar usuário
+            }
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

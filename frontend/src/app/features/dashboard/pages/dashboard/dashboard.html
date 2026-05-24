@@ -1,1 +1,51 @@
-<p>dashboard works!</p>
+<div class="dashboard">
+  <section class="welcome-card">
+    <div>
+      <span class="eyebrow">Painel administrativo</span>
+      <h2>Bem-vindo, {{ user?.name || 'usuário' }}</h2>
+      <p>Veja um resumo atualizado de empresas, usuários e máquinas.</p>
+    </div>
+
+    @if (user) {
+      <div class="user-summary">
+        <strong>{{ user.name }}</strong>
+        <span>{{ user.email }}</span>
+        <small>{{ user.role }}</small>
+      </div>
+    }
+  </section>
+
+  @if (errorMessage) {
+    <div class="alert error">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <section class="cards">
+    @if (isLoading) {
+      <div class="card loading-card">
+        Carregando dados do dashboard...
+      </div>
+    } @else {
+      <div class="card">
+        <span>Total de empresas</span>
+        <strong>{{ totalCompanies }}</strong>
+      </div>
+
+      <div class="card">
+        <span>Total de usuários</span>
+        <strong>{{ totalUsers }}</strong>
+      </div>
+
+      <div class="card">
+        <span>Total de máquinas</span>
+        <strong>{{ totalMachines }}</strong>
+      </div>
+
+      <div class="card profile-card">
+        <span>Perfil do usuário</span>
+        <strong>{{ user?.role || '-' }}</strong>
+      </div>
+    }
+  </section>
+</div>

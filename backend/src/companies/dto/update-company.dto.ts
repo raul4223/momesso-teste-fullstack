@@ -1,4 +1,3 @@
-import { MethodCallUpgradeData } from './../../../../frontend/node_modules/@angular/cdk/schematics/ng-update/data/method-call-checks.d';
 import { IsOptional, IsString, Length } from "class-validator";
 
 export class UpdateCompanyDto {
